@@ -6,6 +6,7 @@
 #include <string>
 #include <memory>
 #include <functional>
+#include <thread>
 
 namespace kinect_tracker
 {
@@ -42,11 +43,21 @@ namespace kinect_tracker
     // デバイス初期化設定
     struct DeviceConfig
     {
-      k4a_depth_mode_t depthMode = K4A_DEPTH_MODE_NFOV_UNBINNED;
-      k4a_color_resolution_t colorResolution = K4A_COLOR_RESOLUTION_OFF;
-      k4a_fps_t fps = K4A_FRAMES_PER_SECOND_30;
-      k4abt_tracker_processing_mode_t processingMode = K4ABT_TRACKER_PROCESSING_MODE_GPU_CUDA;
-      std::string modelPath = "";
+      k4a_depth_mode_t depthMode;
+      k4a_color_resolution_t colorResolution;
+      k4a_fps_t fps;
+      k4abt_tracker_processing_mode_t processingMode;
+      std::string modelPath;
+
+      // デフォルトコンストラクタで初期値を設定
+      DeviceConfig()
+          : depthMode(K4A_DEPTH_MODE_NFOV_UNBINNED),
+            colorResolution(K4A_COLOR_RESOLUTION_OFF),
+            fps(K4A_FRAMES_PER_SECOND_30),
+            processingMode(K4ABT_TRACKER_PROCESSING_MODE_GPU_CUDA),
+            modelPath("")
+      {
+      }
     };
 
     // コンストラクタ
