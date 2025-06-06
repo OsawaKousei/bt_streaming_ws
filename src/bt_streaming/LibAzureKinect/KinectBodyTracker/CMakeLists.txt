@@ -18,6 +18,11 @@ set(LIB_HEADERS
 # ライブラリの作成（静的ライブラリ）
 add_library(kinect_body_tracker STATIC ${LIB_SOURCES} ${LIB_HEADERS})
 
+# 共有ライブラリから使用できるように-fPICフラグを追加
+set_target_properties(kinect_body_tracker PROPERTIES
+    POSITION_INDEPENDENT_CODE ON
+)
+
 # 必要なインクルードディレクトリ
 target_include_directories(kinect_body_tracker PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}

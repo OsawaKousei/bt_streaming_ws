@@ -12,10 +12,21 @@ find_package(rclcpp_components REQUIRED)
 find_package(ament_cmake_auto REQUIRED)
 ament_auto_find_build_dependencies()
 
+# KinectBodyTrackerライブラリのサブディレクトリを追加
+add_subdirectory(LibAzureKinect/KinectBodyTracker)
+
 # Component
 ament_auto_add_library(
   bt_streaming
   bt_streaming.cpp
+)
+
+# KinectBodyTrackerライブラリをリンク
+target_link_libraries(bt_streaming kinect_body_tracker)
+
+# インクルードディレクトリを追加
+target_include_directories(bt_streaming PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 rclcpp_components_register_nodes(
@@ -29,6 +40,13 @@ ament_auto_add_executable(
   bt_streaming_node.cpp
 )
 
+# KinectBodyTrackerライブラリをリンク
+target_link_libraries(bt_streaming_node kinect_body_tracker)
+
+# インクルードディレクトリを追加
+target_include_directories(bt_streaming_node PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}
+)
 
 install(
   DIRECTORY
