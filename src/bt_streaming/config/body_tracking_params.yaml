@@ -1,0 +1,10 @@
+body_tracking:
+  ros__parameters:
+    # パブリッシュレート (Hz)
+    publish_rate: 1.0
+    
+    # フレームID
+    frame_id: "kinect_link"
+    
+    # 非同期モードの使用 (true: 非同期, false: 同期)
+    use_async_mode: true

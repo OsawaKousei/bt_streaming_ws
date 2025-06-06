@@ -50,6 +50,8 @@ target_include_directories(bt_streaming_node PRIVATE
 
 install(
   DIRECTORY
+  launch
+  config
   DESTINATION share/${PROJECT_NAME}
 )
 
