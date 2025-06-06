@@ -13,12 +13,14 @@ namespace kinect_tracker
         m_initialized(false),
         m_isRunning(false)
   {
+    std::cout << "Created KinectBodyTracker instance..." << std::endl;
   }
 
   // デストラクタ
   KinectBodyTracker::~KinectBodyTracker()
   {
     shutdown();
+    std::cout << "KinectBodyTracker instance destroyed." << std::endl;
   }
 
   // デバイスの初期化
