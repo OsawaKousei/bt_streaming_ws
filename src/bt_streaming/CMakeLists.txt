@@ -34,6 +34,22 @@ rclcpp_components_register_nodes(
   "bt_streaming::BodyTracking"
 )
 
+# Subscriber Component
+ament_auto_add_library(
+  bt_subscriber
+  bt_subscriber.cpp
+)
+
+# インクルードディレクトリを追加
+target_include_directories(bt_subscriber PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+rclcpp_components_register_nodes(
+  bt_subscriber
+  "bt_streaming::BodyTrackingSubscriber"
+)
+
 # Node
 ament_auto_add_executable(
   bt_streaming_node
@@ -45,6 +61,17 @@ target_link_libraries(bt_streaming_node kinect_body_tracker)
 
 # インクルードディレクトリを追加
 target_include_directories(bt_streaming_node PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+# Subscriber Node
+ament_auto_add_executable(
+  bt_subscriber_node
+  bt_subscriber_node.cpp
+)
+
+# インクルードディレクトリを追加
+target_include_directories(bt_subscriber_node PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}
 )
 

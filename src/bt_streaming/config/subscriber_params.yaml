@@ -1,0 +1,8 @@
+body_tracking_subscriber:
+  ros__parameters:
+    # サブスクライブするベーストピック名
+    base_topic: "joint_status"
+    
+    # サブスクライブするネームスペース一覧
+    namespaces:
+      - "cam6"
