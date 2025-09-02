@@ -1,5 +1,6 @@
 #include "bt_streaming/bt_subscriber.hpp"
 #include <rclcpp_components/register_node_macro.hpp>
+#include <chrono>
 
 namespace bt_streaming
 {
@@ -18,6 +19,34 @@ namespace bt_streaming
     RCLCPP_INFO(this->get_logger(), "Base topic: %s", base_topic_.c_str());
     RCLCPP_INFO(this->get_logger(), "Number of namespaces: %zu", namespaces_.size());
 
+    // トピック存在確認
+    RCLCPP_INFO(this->get_logger(), "Checking topic availability...");
+    bool all_topics_available = true;
+    
+    for (const auto& namespace_name : namespaces_)
+    {
+      std::string topic_name = "/" + namespace_name + "/" + base_topic_;
+      
+      RCLCPP_INFO(this->get_logger(), "Checking topic: %s", topic_name.c_str());
+      
+      if (!checkTopicExists(topic_name))
+      {
+        RCLCPP_ERROR(this->get_logger(), "Topic '%s' is not available", topic_name.c_str());
+        all_topics_available = false;
+      }
+      else
+      {
+        RCLCPP_INFO(this->get_logger(), "Topic '%s' is available", topic_name.c_str());
+      }
+    }
+
+    if (!all_topics_available)
+    {
+      RCLCPP_ERROR(this->get_logger(), "Some required topics are not available. Shutting down node.");
+      rclcpp::shutdown();
+      return;
+    }
+
     // サブスクライバーの初期化
     initializeSubscribers();
 
@@ -27,6 +56,28 @@ namespace bt_streaming
   BodyTrackingSubscriber::~BodyTrackingSubscriber()
   {
     RCLCPP_INFO(this->get_logger(), "BodyTrackingSubscriber destroyed");
+  }
+
+  bool BodyTrackingSubscriber::checkTopicExists(const std::string& topic_name, int timeout_sec)
+  {
+    auto start_time = std::chrono::steady_clock::now();
+    auto timeout_duration = std::chrono::seconds(timeout_sec);
+
+    while (std::chrono::steady_clock::now() - start_time < timeout_duration)
+    {
+      auto topic_names_and_types = this->get_topic_names_and_types();
+      
+      if (topic_names_and_types.find(topic_name) != topic_names_and_types.end())
+      {
+        return true;
+      }
+
+      // 100ms待機してから再確認
+      std::this_thread::sleep_for(std::chrono::milliseconds(100));
+      rclcpp::spin_some(this->get_node_base_interface());
+    }
+
+    return false;
   }
 
   void BodyTrackingSubscriber::initializeSubscribers()

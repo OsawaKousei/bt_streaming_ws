@@ -16,24 +16,23 @@ namespace bt_streaming
     virtual ~BodyTrackingSubscriber();
 
   private:
-    // サブスクライバーのコンテナ
-    std::vector<rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr> joint_state_subscribers_;
-    
-    // ネームスペース一覧
-    std::vector<std::string> namespaces_;
-    
-    // 各ネームスペースの最新データを保存
-    std::map<std::string, sensor_msgs::msg::JointState::SharedPtr> latest_data_;
-    
     // パラメータ
     std::string base_topic_;
-    
+    std::vector<std::string> namespaces_;
+
+    // サブスクライバー
+    std::vector<rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr> joint_state_subscribers_;
+
+    // 最新データ保存用
+    std::map<std::string, sensor_msgs::msg::JointState::SharedPtr> latest_data_;
+
     // 初期化関数
     void initializeSubscribers();
-    
+    bool checkTopicExists(const std::string& topic_name, int timeout_sec = 5);
+
     // コールバック関数
     void jointStateCallback(const sensor_msgs::msg::JointState::SharedPtr msg, const std::string& namespace_name);
-    
+
     // データ処理関数
     void processJointData(const std::string& namespace_name, const sensor_msgs::msg::JointState::SharedPtr msg);
   };
