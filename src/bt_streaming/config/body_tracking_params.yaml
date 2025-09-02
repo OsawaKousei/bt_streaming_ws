@@ -8,3 +8,6 @@ body_tracking:
     
     # 非同期モードの使用 (true: 非同期, false: 同期)
     use_async_mode: true
+    
+    # ネームスペース設定
+    namespace: "body_tracking"

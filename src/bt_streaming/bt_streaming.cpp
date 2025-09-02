@@ -11,14 +11,17 @@ namespace bt_streaming
     this->declare_parameter("publish_rate", 30.0);
     this->declare_parameter("frame_id", "kinect_link");
     this->declare_parameter("use_async_mode", true);
+    this->declare_parameter("namespace", "body_tracking");
 
     publish_rate_ = this->get_parameter("publish_rate").as_double();
     frame_id_ = this->get_parameter("frame_id").as_string();
     use_async_mode_ = this->get_parameter("use_async_mode").as_bool();
+    std::string namespace_param = this->get_parameter("namespace").as_string();
 
-    // パブリッシャーの作成
+    // パブリッシャーの作成（動的なトピック名）
+    std::string topic_name = namespace_param + "/joint_status";
     joint_state_pub_ = this->create_publisher<sensor_msgs::msg::JointState>(
-        "body_tracking/joint_states", 10);
+        topic_name, 10);
 
     // Kinectの初期化
     if (!initializeKinect())
