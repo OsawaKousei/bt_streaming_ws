@@ -18,6 +18,12 @@ namespace bt_streaming
     use_async_mode_ = this->get_parameter("use_async_mode").as_bool();
     std::string namespace_param = this->get_parameter("namespace").as_string();
 
+    RCLCPP_INFO(this->get_logger(), "Initializing BodyTracking Node");
+    RCLCPP_INFO(this->get_logger(), "Publish rate: %.2f Hz", publish_rate_);
+    RCLCPP_INFO(this->get_logger(), "Frame ID: %s", frame_id_.c_str());
+    RCLCPP_INFO(this->get_logger(), "Use async mode: %s", use_async_mode_ ? "true" : "false");
+    RCLCPP_INFO(this->get_logger(), "Namespace: %s", namespace_param.c_str());
+
     // パブリッシャーの作成（動的なトピック名）
     std::string topic_name = namespace_param + "/joint_status";
     joint_state_pub_ = this->create_publisher<sensor_msgs::msg::JointState>(

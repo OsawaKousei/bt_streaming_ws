@@ -14,7 +14,7 @@ def generate_launch_description():
         Node(
             package='bt_streaming',
             executable='bt_streaming_node',
-            name='bt_streaming_node',
+            name='body_tracking',
             parameters=[config],
             output='screen'
         )
